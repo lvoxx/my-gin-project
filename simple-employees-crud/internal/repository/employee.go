@@ -256,24 +256,6 @@ func (r *PostgresEmployeeRepository) ExistsByEmail(ctx context.Context, email st
 
 // ─── Filter / scan helpers ────────────────────────────────────────────────────
 
-// Normalise applies EmployeeFilter defaults (delegates to EmployeeFilter method).
-func (f *domain.EmployeeFilter) Normalise() {
-	if f.Page < 1 {
-		f.Page = 1
-	}
-	if f.Limit < 1 {
-		f.Limit = 20
-	}
-	if f.Limit > 100 {
-		f.Limit = 100
-	}
-}
-
-// Offset returns the SQL OFFSET for f.
-func (f *domain.EmployeeFilter) Offset() int {
-	return (f.Page - 1) * f.Limit
-}
-
 func buildEmployeeWhere(f domain.EmployeeFilter) (string, []any) {
 	var clauses []string
 	var args []any

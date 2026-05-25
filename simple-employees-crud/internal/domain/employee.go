@@ -65,6 +65,24 @@ func (e *Employee) IsAtLeast(role EmployeeRole) bool {
 	return hierarchy[e.Role] >= hierarchy[role]
 }
 
+// Normalise applies default pagination constraints.
+func (f *EmployeeFilter) Normalise() {
+	if f.Page < 1 {
+		f.Page = 1
+	}
+	if f.Limit < 1 {
+		f.Limit = 20
+	}
+	if f.Limit > 100 {
+		f.Limit = 100
+	}
+}
+
+// Offset returns SQL OFFSET value.
+func (f *EmployeeFilter) Offset() int {
+	return (f.Page - 1) * f.Limit
+}
+
 // EmployeeFilter carries optional predicates for listing employees.
 // nil pointer fields mean "no filter on this column".
 type EmployeeFilter struct {
