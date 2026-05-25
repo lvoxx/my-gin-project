@@ -1,0 +1,31 @@
+# Binaries
+bin/
+tmp/
+
+# Test artefacts
+coverage.out
+coverage.html
+
+# Logs (Fluent Bit picks these up; don't commit them)
+logs/
+
+# Env files — the real .env files contain secrets; only commit .env.dev (with REPLACE-ME values)
+.env
+.env.prod
+.env.staging
+
+# Swagger generated output (commit only if you want to pin it)
+# docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Go build cache artefacts
+*.test
+*.prof

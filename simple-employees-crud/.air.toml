@@ -1,0 +1,27 @@
+# .air.toml — Hot-reload config for https://github.com/air-verse/air
+# Install: go install github.com/air-verse/air@latest
+# Usage:   make dev  (or: air -c .air.toml)
+
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o ./tmp/main ./cmd/server"
+  bin = "./tmp/main"
+  delay = 500            # ms — wait for file system to settle before rebuilding
+  exclude_dir  = ["vendor", "tmp", "logs", "docs", "bin"]
+  include_ext  = ["go", "env", "toml"]
+  exclude_file = []
+  kill_delay   = "0s"
+
+[log]
+  time = true
+
+[color]
+  main    = "magenta"
+  watcher = "cyan"
+  build   = "yellow"
+  runner  = "green"
+
+[misc]
+  clean_on_exit = true
