@@ -1,0 +1,66 @@
+version: '3.3'
+
+services:
+  demo_app:
+    build:
+      context: app
+    depends_on:
+      - fluentbit
+      - jaeger
+
+  fluentbit:
+    build:
+      context: fluentbit
+    restart: always
+    depends_on:
+      jaeger:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      collector:
+        condition: service_started
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/datasources/:/etc/grafana/provisioning/datasources/
+      - ./grafana/dashboards/:/etc/grafana/provisioning/dashboards
+      - ./grafana/dashboard-files/:/docker-compose/dashboards/
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.35
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+
+  collector:
+    image: otel/opentelemetry-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./collector/logs.yaml:/etc/otel-collector-config.yaml
+
+  vivo:
+    image: ghcr.io/calyptia/vivo
+    environment:
+      - VIVO_TOKEN=changemeuig4phooch1theeheeneishahlarood5eiveiDeezie2eeng5IY4Doh4chee7eeB
+    ports:
+      - "5489:5489"
+      - "24224:24224"
+
+volumes:
+  prometheus-data:
+  grafana-storage:
