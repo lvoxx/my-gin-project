@@ -118,7 +118,8 @@ func FromContext(ctx context.Context, pool *pgxpool.Pool) DBTX {
 type queryTracer struct{}
 
 func (t *queryTracer) TraceQueryStart(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryStartData) context.Context {
-	return context.WithValue(ctx, struct{ key string }{"sql_start"}, time.Now())
+	ctx = context.WithValue(ctx, struct{ key string }{"sql_start"}, time.Now())
+	return context.WithValue(ctx, struct{ key string }{"sql_query"}, data.SQL)
 }
 
 func (t *queryTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pgx.TraceQueryEndData) {
@@ -126,10 +127,11 @@ func (t *queryTracer) TraceQueryEnd(ctx context.Context, conn *pgx.Conn, data pg
 	if !ok {
 		return
 	}
+	sql, _ := ctx.Value(struct{ key string }{"sql_query"}).(string)
 	elapsed := time.Since(start)
 	if elapsed > 200*time.Millisecond {
 		logger.S().Warnw("slow query detected",
-			"sql", data.SQL,
+			"sql", sql,
 			"duration_ms", elapsed.Milliseconds(),
 		)
 	}

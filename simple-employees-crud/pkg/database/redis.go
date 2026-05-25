@@ -12,7 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"employee-management/pkg/logger"
+	"simple-employees-crud/pkg/logger"
 )
 
 // RedisConfig holds connection parameters for the Redis client.

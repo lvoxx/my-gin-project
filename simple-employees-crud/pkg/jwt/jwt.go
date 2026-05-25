@@ -41,7 +41,7 @@ func (m *Manager) Generate(employeeID uuid.UUID, email, role string, exp time.Du
 		RegisteredClaims: gojwt.RegisteredClaims{
 			IssuedAt:  gojwt.NewNumericDate(now),
 			ExpiresAt: gojwt.NewNumericDate(now.Add(exp)),
-			Issuer:    "employee-management",
+			Issuer:    "simple-employees-crud",
 		},
 	}
 

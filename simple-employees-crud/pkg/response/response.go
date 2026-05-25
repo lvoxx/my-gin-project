@@ -9,16 +9,17 @@ package response
 import (
 	"net/http"
 
+	"simple-employees-crud/pkg/apperror"
+
 	"github.com/gin-gonic/gin"
-	"employee-management/pkg/apperror"
 )
 
 // Envelope is the top-level JSON wrapper for all API responses.
 type Envelope struct {
-	Success bool         `json:"success"`
-	Data    any          `json:"data,omitempty"`
-	Error   *ErrorBody   `json:"error,omitempty"`
-	Meta    *Pagination  `json:"meta,omitempty"`
+	Success bool        `json:"success"`
+	Data    any         `json:"data,omitempty"`
+	Error   *ErrorBody  `json:"error,omitempty"`
+	Meta    *Pagination `json:"meta,omitempty"`
 }
 
 // ErrorBody is the structured error object inside a failed Envelope.
